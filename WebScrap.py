@@ -18,32 +18,35 @@ scrappedID = 0
 newAds = 0
 NotFoundURL = []
 newScrapped = []
+
+
 today = date.today()
 
+#Create File 1: All scrapped Ads
 scarpe_data = today.strftime(" %B %d, %Y Raw Scrapped Data") + ".csv"
 kijijiFile = open(scarpe_data, 'w')
 raw_data = csv.writer(kijijiFile)
 raw_data.writerow(["scrappedID","URL", "Address","Full Address", "Price","Uploaded Date","New Uploaded"])
 
+#Get previously Scrapped Ads to compare with new scrapped ads. 
 PreviouslyScrapped = []
 with open('ScrappedAddess.txt', 'r') as filehandle:
     filecontents = filehandle.readlines()
-
     for line in filecontents:
-        # remove linebreak which is the last character of the string
         current_place = line[:-1]
-
-        # add item to the list
         PreviouslyScrapped.append(current_place)
+
 
 main_url = 'https://www.kijiji.ca/b-house-for-sale/winnipeg/c35l1700192?ll=49.894256%2C-97.138774&for-sale-by=ownr&address=Downtown%2C+Winnipeg%2C+MB&ad=offering&radius=30.0'
 urlPages = "https://www.kijiji.ca/b-house-for-sale/winnipeg/page-{}/c35l1700192?radius=30.0&ad=offering&address=Downtown%2C+Winnipeg%2C+MB&ll=49.894256,-97.138774&for-sale-by=ownr"
 
+# Clears content from perviosly scrapped Data. 
+# SQL QUERY:  Delete From Scrapped;
 clearContent()
 
-def getURLlinks(main_url):
+def getURLlinks(UrlPage):
 
-	r = requests.get(main_url)
+	r = requests.get(UrlPage)
 	soup = BeautifulSoup(r.text, 'html.parser')
 
 	URL_Ads = []
@@ -68,7 +71,7 @@ def getAddress(address):
 
 		else:
 			streetAddress = fullAddress
-		
+		#Saves all the scrapped Data
 		newScrapped.append(fullAddress)
 		return streetAddress, fullAddress
 	
@@ -136,6 +139,8 @@ def getData(links,doublCheck):
 			raw_data.writerow([scrappedID, getAddress(address)[0],getAddress(address)[1],getPrice(price),getDate(UploadedDate),newUpload,URL])
 		elif not doublCheck:
 			NotFoundURL.append(URL)
+			
+#Saves the new Scrapped data to compare for new Ads for the next time 
 def saveSrappedHouses():
 	with open('ScrappedAddess.txt', 'w') as filehandle:
 	    for listitem in newScrapped:
@@ -147,6 +152,7 @@ def writeCvs(file,compared_CVS, rows):
 		colum[7],colum[8],colum[9],colum[10],colum[11],colum[12],colum[13],colum[14],colum[15]])
 	file.close()
 
+#My computer needs time laps 
 getData(getURLlinks(main_url),False)
 print ("Main Page is done: \n")
 time.sleep(120)
