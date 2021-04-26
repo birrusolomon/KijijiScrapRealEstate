@@ -22,13 +22,13 @@ newScrapped = []
 
 today = date.today()
 
-#Create File 1: All scrapped Ads
+#Create File 1: All scraped Ads
 scarpe_data = today.strftime(" %B %d, %Y Raw Scrapped Data") + ".csv"
 kijijiFile = open(scarpe_data, 'w')
 raw_data = csv.writer(kijijiFile)
 raw_data.writerow(["scrappedID","URL", "Address","Full Address", "Price","Uploaded Date","New Uploaded"])
 
-#Get previously Scrapped Ads to compare with new scrapped ads. 
+#Get previously Scraped Ads to compare with new scraped ads. 
 PreviouslyScrapped = []
 with open('ScrappedAddess.txt', 'r') as filehandle:
     filecontents = filehandle.readlines()
@@ -40,7 +40,7 @@ with open('ScrappedAddess.txt', 'r') as filehandle:
 main_url = 'https://www.kijiji.ca/b-house-for-sale/winnipeg/c35l1700192?ll=49.894256%2C-97.138774&for-sale-by=ownr&address=Downtown%2C+Winnipeg%2C+MB&ad=offering&radius=30.0'
 urlPages = "https://www.kijiji.ca/b-house-for-sale/winnipeg/page-{}/c35l1700192?radius=30.0&ad=offering&address=Downtown%2C+Winnipeg%2C+MB&ll=49.894256,-97.138774&for-sale-by=ownr"
 
-# Clears content from perviosly scrapped Data. 
+# Clears content from previously scraped Data. 
 # SQL QUERY:  Delete From Scrapped;
 clearContent()
 
